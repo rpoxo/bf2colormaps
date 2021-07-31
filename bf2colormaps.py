@@ -2,7 +2,6 @@
 import os
 import sys
 import re
-import PIL
 from PIL import Image
 
 pattern = r'tx0(?P<x>\d)x0(?P<y>\d).dds'
@@ -16,8 +15,10 @@ def main(colormaps):
     filenames = [item for item in os.listdir(colormaps) if re.match(pattern, item)]
 
     # get amount of colormaps rows and columns for calculating resulting size
-    numx = int(max([re.match(pattern, fname).group('x') for fname in filenames]))+1
-    numy = int(max([re.match(pattern, fname).group('y') for fname in filenames]))+1
+    numx, numy = [max(int(x) for x in nums) + 1 for nums in zip(*[
+        [match.group(groupname) for groupname in ['x', 'y']]
+        for match in (re.match(pattern, fname) for fname in os.listdir(colormaps)) if match
+    ])]
 
     # get tx0*x0*.dds patch size
     patch = Image.open(os.path.join(colormaps, filenames[0]))
