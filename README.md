@@ -1,1 +1,1 @@
-Small script for merging bf2 levels colormaps textures into single file for editing
+Small script for merging bf2 colormap textures into single image for editing
